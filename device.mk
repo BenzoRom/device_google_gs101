@@ -54,7 +54,7 @@ LOCAL_KERNEL := $(TARGET_KERNEL_DIR)/Image.lz4
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 	ro.oem_unlock_supported=1
 
-ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
+ifeq ($(VENDOR_DEBUG),true)
 #Set IKE logs to verbose for WFC
 PRODUCT_PROPERTY_OVERRIDES += log.tag.IKE=VERBOSE
 
@@ -847,9 +847,11 @@ PRODUCT_PACKAGES += ShannonIms
 $(call inherit-product-if-exists, vendor/samsung_slsi/telephony/shannon-iwlan/device-vendor.mk)
 include device/google/gs101/telephony/pktrouter.mk
 
+ifeq ($(RCS_DEBUG),true)
 #RCS Test Messaging App
 PRODUCT_PACKAGES_DEBUG += \
 	TestRcsApp
+endif
 
 PRODUCT_PACKAGES += ShannonRcs
 
@@ -1102,7 +1104,9 @@ include hardware/google/pixel/PixelLogger/PixelLogger.mk
 include device/google/gs101/telephony/user.mk
 
 # Battery Stats Viewer
+ifeq ($(VENDOR_DEBUG),true)
 PRODUCT_PACKAGES_DEBUG += BatteryStatsViewer
+endif
 
 # Install product specific framework compatibility matrix
 # (TODO: b/169535506) This includes the FCM for system_ext and product partition.
